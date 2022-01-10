@@ -101,6 +101,22 @@ def main(_):
 
   if not gfile.exists(FLAGS.checkpoint_dir):
     gfile.makedirs(FLAGS.checkpoint_dir)
+    
+  print("Configuring GPUs")
+  gpus = tf.config.experimental.list_physical_devices('GPU')
+  if(gpus):
+    gpu_list = []
+    gpu_list.append(gpus[5])
+    gpu_list.append(gpus[6])
+    
+    try:
+        tf.config.experimental.set_visible_devices(gpu_list,'GPU')
+        logical_gpus = tf.config.experimental.list_logical_devices('GPU')
+        print("Logical GPUs: ",logical_gpus)
+        print(len(gpus),"Physical GPUs", len(logical_gpus), "Logical GPU")
+    except RunTimeError as e:
+        print(e)
+  print("...Done")
 
   train_model = model.Model(data_dir=FLAGS.data_dir,
                             is_training=True,
@@ -130,11 +146,11 @@ def train(train_model, pretrained_ckpt, checkpoint_dir, train_steps,
   saver = tf.compat.v1.train.Saver(vars_to_save + [train_model.global_step],
                          max_to_keep=MAX_TO_KEEP)
   sv = tf.compat.v1.train.Supervisor(logdir=checkpoint_dir, save_summaries_secs=0,
-                           saver=None)
-  #config = tf.compat.v1.ConfigProto()
-  #config.gpu_options.allow_growth = True
-  config = tf.compat.v1.ConfigProto(device_count = {'GPU': 7,'GPU':6 })
-  #gpu_options = tf.GPUOptions(allow_growth=True, visible_device_list=str(gpu_id))
+                           saver=None) 
+
+  config = tf.compat.v1.ConfigProto()
+  config.gpu_options.allow_growth = True
+
   with sv.managed_session(config=config) as sess:
     if pretrained_ckpt is not None:
       logging.info('Restoring pretrained weights from %s', pretrained_ckpt)
