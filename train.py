@@ -58,6 +58,25 @@ Img_width = 416
 Seq_length = 3
 Legacy_mode = False
 
+print("Configuring GPUs")
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if(gpus):
+    gpu_list = []
+    gpu_list.append(gpus[5])
+    gpu_list.append(gpus[6])
+    gpu_list.append(gpus[7])
+    #gpu_list.append(gpus[4])
+    #gpu_list.append(gpus[6])
+    
+    try:
+        tf.config.experimental.set_visible_devices(gpu_list,'GPU')
+        logical_gpus = tf.config.experimental.list_logical_devices('GPU')
+        print("Logical GPUs: ",logical_gpus)
+        print(len(gpus),"Physical GPUs", len(logical_gpus), "Logical GPU")
+    except RunTimeError as e:
+        print(e)
+print("...Done")
+
 
 HOME_DIR = os.path.expanduser('./')
 DEFAULT_DATA_DIR = os.path.join(HOME_DIR, 'kitti_raw_eigen')
