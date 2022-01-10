@@ -133,7 +133,7 @@ def train(train_model, pretrained_ckpt, checkpoint_dir, train_steps,
                            saver=None)
   #config = tf.compat.v1.ConfigProto()
   #config.gpu_options.allow_growth = True
-  config = tf.ConfigProto(device_count = {'GPU': 7,'GPU':6 })
+  config = tf.compat.v1.ConfigProto(device_count = {'GPU': 7,'GPU':6 })
   gpu_options = tf.GPUOptions(allow_growth=True, visible_device_list=str(gpu_id))
   with sv.managed_session(config=config) as sess:
     if pretrained_ckpt is not None:
