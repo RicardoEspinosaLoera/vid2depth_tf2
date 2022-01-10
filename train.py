@@ -131,7 +131,6 @@ def train(train_model, pretrained_ckpt, checkpoint_dir, train_steps,
                          max_to_keep=MAX_TO_KEEP)
   sv = tf.compat.v1.train.Supervisor(logdir=checkpoint_dir, save_summaries_secs=0,
                            saver=None) 
-  tf.train.MonitoredTrainingSession
 
   config = tf.compat.v1.ConfigProto()
   config.gpu_options.allow_growth = True
