@@ -88,6 +88,7 @@ FLAGS = flags.FLAGS
 MAX_TO_KEEP = 100
 
 
+
 def main(_):
   # Fixed seed for repeatability
   seed = 8964
@@ -114,6 +115,23 @@ def main(_):
                             img_width=FLAGS.img_width,
                             seq_length=FLAGS.seq_length,
                             legacy_mode=FLAGS.legacy_mode)
+  
+  print("Configuring GPUs")
+  gpus = tf.config.experimental.list_physical_devices('GPU')
+  if(gpus):
+    gpu_list = []
+    gpu_list.append(gpus[5])
+    gpu_list.append(gpus[6])
+    gpu_list.append(gpus[7])
+    
+    try:
+        tf.config.experimental.set_visible_devices(gpu_list,'GPU')
+        logical_gpus = tf.config.experimental.list_logical_devices('GPU')
+        print("Logical GPUs: ",logical_gpus)
+        print(len(gpus),"Physical GPUs", len(logical_gpus), "Logical GPU")
+    except RunTimeError as e:
+        print(e)
+  print("...Done")
 
   train(train_model, FLAGS.pretrained_ckpt, FLAGS.checkpoint_dir,
         FLAGS.train_steps, FLAGS.summary_freq)
@@ -132,7 +150,7 @@ def train(train_model, pretrained_ckpt, checkpoint_dir, train_steps,
                            saver=None)
   config = tf.compat.v1.ConfigProto()
   #config.gpu_options.allow_growth = True
-
+  """
   gpus = tf.config.experimental.list_physical_devices('GPU')
   if(gpus):
     gpu_list = []
@@ -146,7 +164,7 @@ def train(train_model, pretrained_ckpt, checkpoint_dir, train_steps,
         print(len(gpus),"Physical GPUs", len(logical_gpus), "Logical GPU")
     except RunTimeError as e:
         print(e)  
-
+  """
   with sv.managed_session(config=config) as sess:
     if pretrained_ckpt is not None:
       logging.info('Restoring pretrained weights from %s', pretrained_ckpt)
