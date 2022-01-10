@@ -173,7 +173,6 @@ def _gen_example(i, all_examples):
 
   key = example['folder_name'] + '_' + example['file_name']
   all_examples[key] = example
-  print("ends_gen_example")
 
 
 def _gen_example_star(params):
