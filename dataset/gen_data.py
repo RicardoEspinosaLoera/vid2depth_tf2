@@ -150,7 +150,6 @@ def _generate_data():
 
 def _gen_example(i, all_examples):
   """Saves one example to file.  Also adds it to all_examples dict."""
-  print("begin_gen_example")
   example = dataloader.get_example_with_index(i)
   if not example:
     return
