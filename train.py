@@ -133,7 +133,7 @@ def train(train_model, pretrained_ckpt, checkpoint_dir, train_steps,
   config = tf.compat.v1.ConfigProto()
   #config.gpu_options.allow_growth = True
 
-  gpus = config.experimental.list_physical_devices('GPU')
+  gpus = tf.config.experimental.list_physical_devices('GPU')
   if(gpus):
     gpu_list = []
     gpu_list.append(gpus[5])
