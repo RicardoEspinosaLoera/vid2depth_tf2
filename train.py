@@ -129,7 +129,7 @@ def train(train_model, pretrained_ckpt, checkpoint_dir, train_steps,
   vars_to_save = util.get_vars_to_restore()
   saver = tf.compat.v1.train.Saver(vars_to_save + [train_model.global_step],
                          max_to_keep=MAX_TO_KEEP)
-  sv = tf.train.MonitoredTrainingSession(logdir=checkpoint_dir, save_summaries_secs=0,
+  sv = tf.train.training.supervisor(logdir=checkpoint_dir, save_summaries_secs=0,
                            saver=None) 
   tf.train.MonitoredTrainingSession
 
