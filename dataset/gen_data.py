@@ -39,6 +39,7 @@ import dataset_loader
 import numpy as np
 import scipy.misc
 import tensorflow as tf
+import imageio
 
 gfile = tf.io.gfile
 FLAGS = flags.FLAGS
@@ -164,7 +165,8 @@ def _gen_example(i, all_examples):
   if not gfile.exists(save_dir):
     gfile.makedirs(save_dir)
   img_filepath = os.path.join(save_dir, '%s.jpg' % example['file_name'])
-  scipy.misc.imsave(img_filepath, image_seq_stack.astype(np.uint8))
+  #scipy.misc.imsave(img_filepath, image_seq_stack.astype(np.uint8))
+  imageio.imwrite(img_filepath, image_seq_stack.astype(np.uint8))
   cam_filepath = os.path.join(save_dir, '%s_cam.txt' % example['file_name'])
   example['cam'] = '%f,0.,%f,0.,%f,%f,0.,0.,1.' % (fx, cx, fy, cy)
   with open(cam_filepath, 'w') as cam_f:
