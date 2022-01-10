@@ -139,13 +139,13 @@ def train(train_model, pretrained_ckpt, checkpoint_dir, train_steps,
     gpu_list.append(gpus[5])
     gpu_list.append(gpus[6])
     gpu_list.append(gpus[7])
-        try:
-            config.experimental.set_visible_devices(gpu_list,'GPU')
-            logical_gpus = config.experimental.list_logical_devices('GPU')
-            print("Logical GPUs: ",logical_gpus)
-            print(len(gpus),"Physical GPUs", len(logical_gpus), "Logical GPU")
-        except RunTimeError as e:
-            print(e)  
+    try:
+        config.experimental.set_visible_devices(gpu_list,'GPU')
+        logical_gpus = config.experimental.list_logical_devices('GPU')
+        print("Logical GPUs: ",logical_gpus)
+        print(len(gpus),"Physical GPUs", len(logical_gpus), "Logical GPU")
+    except RunTimeError as e:
+        print(e)  
 
   with sv.managed_session(config=config) as sess:
     if pretrained_ckpt is not None:
