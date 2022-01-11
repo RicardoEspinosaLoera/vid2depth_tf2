@@ -30,6 +30,7 @@ import util
 import tf_slim as slim
 
 tf.compat.v1.disable_eager_execution()
+gfile = tf.io.gfile
 
 NUM_SCALES = 4
 
@@ -40,4 +41,5 @@ print(intrinsic_mat.shape)
 print(intrinsic_mat_inv.shape)
 
 for a in file_lists['image_file_list']:
-    print(a)
+    if not gfile.exists(a):
+        print(a)
