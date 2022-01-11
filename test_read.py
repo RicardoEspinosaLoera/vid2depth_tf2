@@ -33,5 +33,5 @@ tf.compat.v1.disable_eager_execution()
 
 NUM_SCALES = 4
 
-reader = reader.DataReader("/workspace/vid2depth/vid2depth_tf2/bike-uncompressed/data", 4,128, 416, 3, NUM_SCALES)
+reader = reader.DataReader("/workspace/vid2depth/vid2depth_tf2/data", 4,128, 416, 3, NUM_SCALES)
 image_stack, intrinsic_mat, intrinsic_mat_inv = reader.read_data()
