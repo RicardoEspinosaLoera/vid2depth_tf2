@@ -71,8 +71,8 @@ class DataReader(object):
         image_seq = tf.io.decode_jpeg(image_contents)
         f = open("concat.txt", "w")
         f.write("\nimage_seq\n")
-        f.close()
         f.write(str(image_seq.shape))
+        f.close()
       with tf.compat.v1.name_scope('load_intrinsics'):
         cam_reader = tf.compat.v1.TextLineReader()
         _, raw_cam_contents = cam_reader.read(cam_paths_queue)
