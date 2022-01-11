@@ -26,8 +26,8 @@ import tensorflow as tf
 import util
 import glob
 
-gfile = tf.compat.v1.gfile
-
+#gfile = tf.compat.v1.gfile
+gfile = tf.io.gfile
 
 QUEUE_SIZE = 2000
 QUEUE_BUFFER = 3
@@ -78,8 +78,7 @@ class DataReader(object):
         image_stack = self.unpack_images(image_seq)
 
       with tf.compat.v1.name_scope('image_augmentation_scale_crop'):
-        image_stack, intrinsics = self.augment_images_scale_crop(
-        image_stack, intrinsics, self.img_height, self.img_width)
+        image_stack, intrinsics = self.augment_images_scale_crop(image_stack, intrinsics, self.img_height, self.img_width)
 
       with tf.compat.v1.name_scope('multi_scale_intrinsics'):
         intrinsic_mat = self.get_multi_scale_intrinsics(intrinsics,self.num_scales)
@@ -199,7 +198,7 @@ class DataReader(object):
         ]
     '''
 
-    with gfile.Open(os.path.join(data_dir, '%s.txt' % split), 'r') as f:
+    with gfile.GFile(os.path.join(data_dir, '%s.txt' % split), 'r') as f:
       frames = f.readlines()
     subfolders = [x.split(' ')[0] for x in frames]
     frame_ids = [x.split(' ')[1][:-1] for x in frames]
