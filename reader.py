@@ -96,7 +96,7 @@ class DataReader(object):
                 min_after_dequeue=QUEUE_SIZE))
         logging.info('image_stack: %s', util.info(image_stack))
     
-    return image_stack, intrinsic_mat, intrinsic_mat_inv,self.file_lists['image_file_list']
+    return image_stack, intrinsic_mat, intrinsic_mat_inv,image_paths_queue
 
   def unpack_images(self, image_seq):
     """[h, w * seq_length, 3] -> [h, w, 3 * seq_length]."""
