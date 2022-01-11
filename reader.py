@@ -56,6 +56,8 @@ class DataReader(object):
         f.write("\nfile_lists\n")
         f.write(str(len(self.file_lists)))
         image_paths_queue = tf.compat.v1.train.string_input_producer(self.file_lists['image_file_list'], seed=seed, shuffle=True)
+        f.write("\image_paths_queue\n")
+        f.write(str(image_paths_queue.shape))
         #image_paths_queue = tf.data.TextLineDataset(self.file_lists['image_file_list'])
         cam_paths_queue = tf.compat.v1.train.string_input_producer(self.file_lists['cam_file_list'], seed=seed, shuffle=True)
         #cam_paths_queue = tf.data.TextLineDataset(self.file_lists['cam_file_list'])
