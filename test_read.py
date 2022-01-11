@@ -38,6 +38,4 @@ image_stack, intrinsic_mat, intrinsic_mat_inv,image_paths_queue = reader.read_da
 print(image_stack.shape)
 print(intrinsic_mat.shape)
 print(intrinsic_mat_inv.shape)
-print(len(image_paths_queue))
-
-image = self.image_stack[:, :, :, 3 * i:3 * (i + 1)]
+print(image_paths_queue.size())
