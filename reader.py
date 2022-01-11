@@ -83,7 +83,6 @@ class DataReader(object):
 
       with tf.compat.v1.name_scope('multi_scale_intrinsics'):
         intrinsic_mat = self.get_multi_scale_intrinsics(intrinsics,self.num_scales)
-      with tf.compat.v1.name_scope('multi_scale_intrinsics2'):
         intrinsic_mat.set_shape([self.num_scales, 3, 3])
         intrinsic_mat_inv = tf.linalg.inv(intrinsic_mat)
         intrinsic_mat_inv.set_shape([self.num_scales, 3, 3])
@@ -236,14 +235,15 @@ class DataReader(object):
 
   @classmethod
   def get_multi_scale_intrinsics(cls, intrinsics, num_scales):
-    """Returns multiple intrinsic matrices for different scales."""
-    intrinsics_multi_scale = []
-    # Scale the intrinsics accordingly for each scale
-    for s in range(num_scales):
-      fx = intrinsics[0, 0] / (2**s)
-      fy = intrinsics[1, 1] / (2**s)
-      cx = intrinsics[0, 2] / (2**s)
-      cy = intrinsics[1, 2] / (2**s)
-      intrinsics_multi_scale.append(cls.make_intrinsics_matrix(fx, fy, cx, cy))
-    intrinsics_multi_scale = tf.stack(intrinsics_multi_scale)
-    return intrinsics_multi_scale
+    with tf.compat.v1.name_scope('get_multi_scale_intrinsics'):
+      """Returns multiple intrinsic matrices for different scales."""
+      intrinsics_multi_scale = []
+      # Scale the intrinsics accordingly for each scale
+      for s in range(num_scales):
+        fx = intrinsics[0, 0] / (2**s)
+        fy = intrinsics[1, 1] / (2**s)
+        cx = intrinsics[0, 2] / (2**s)
+        cy = intrinsics[1, 2] / (2**s)
+        intrinsics_multi_scale.append(cls.make_intrinsics_matrix(fx, fy, cx, cy))
+      intrinsics_multi_scale = tf.stack(intrinsics_multi_scale)
+      return intrinsics_multi_scale
