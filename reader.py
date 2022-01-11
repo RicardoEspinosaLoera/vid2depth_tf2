@@ -94,7 +94,7 @@ class DataReader(object):
                 min_after_dequeue=QUEUE_SIZE))
         logging.info('image_stack: %s', util.info(image_stack))
     
-    return image_stack, intrinsic_mat, intrinsic_mat_inv
+    return image_stack, intrinsic_mat, intrinsic_mat_inv,self.file_lists
 
   def unpack_images(self, image_seq):
     """[h, w * seq_length, 3] -> [h, w, 3 * seq_length]."""
@@ -210,11 +210,7 @@ class DataReader(object):
           os.path.join(data_dir, subfolders[i], frame_ids[i] + '_cam.txt')
           for i in range(len(frames))
       ]    
-      f = open("concat.txt", "w")
-      f.write("\image_file_list\n")
-      f.write(str(len(image_file_list)))
-      f.close()
-    
+      
       file_lists = {}
       file_lists['image_file_list'] = image_file_list
       file_lists['cam_file_list'] = cam_file_list

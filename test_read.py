@@ -34,8 +34,10 @@ tf.compat.v1.disable_eager_execution()
 NUM_SCALES = 4
 
 reader = reader.DataReader("/workspace/vid2depth/vid2depth_tf2/data", 4,128, 416, 3, NUM_SCALES)
-image_stack, intrinsic_mat, intrinsic_mat_inv,image_seq = reader.read_data()
+image_stack, intrinsic_mat, intrinsic_mat_inv,file_lists = reader.read_data()
 print(image_stack.shape)
 print(intrinsic_mat.shape)
 print(intrinsic_mat_inv.shape)
-print(image_seq.shape)
+
+for(a in file_lists):
+    print(a)
