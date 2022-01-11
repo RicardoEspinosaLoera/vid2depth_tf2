@@ -35,7 +35,6 @@ gfile = tf.io.gfile
 
 NUM_SCALES = 4
 
-
 class Model(object):
   """Model code from SfMLearner."""
 
