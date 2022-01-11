@@ -48,7 +48,7 @@ class Model(object):
                smooth_weight=0.05,
                ssim_weight=0.15,
                icp_weight=0.0,
-               batch_size=5,
+               batch_size=4,
                img_height=128,
                img_width=416,
                seq_length=3,
