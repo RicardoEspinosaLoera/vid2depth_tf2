@@ -57,7 +57,7 @@ class DataReader(object):
         #image_paths_queue = tf.data.TextLineDataset(self.file_lists['cam_file_list'])
         img_reader = tf.compat.v1.WholeFileReader()
         _, image_contents = img_reader.read(image_paths_queue)
-        image_seq = tf.image.decode_jpeg(image_contents)
+        image_seq = tf.io.decode_jpeg(image_contents)
         f = open("concat.txt", "w")
         f.write("enqueue_paths-"+str(image_seq.shape))
         f.close()
