@@ -35,3 +35,6 @@ NUM_SCALES = 4
 
 reader = reader.DataReader("/workspace/vid2depth/vid2depth_tf2/data", 4,128, 416, 3, NUM_SCALES)
 image_stack, intrinsic_mat, intrinsic_mat_inv = reader.read_data()
+print(image_stack.shape)
+print(intrinsic_mat.shape)
+print(intrinsic_mat_inv.shape)
