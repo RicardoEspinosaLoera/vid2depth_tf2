@@ -82,8 +82,8 @@ class DataReader(object):
             image_stack, intrinsics, self.img_height, self.img_width)
 
       with tf.compat.v1.name_scope('multi_scale_intrinsics'):
-        intrinsic_mat = self.get_multi_scale_intrinsics(intrinsics,
-                                                        self.num_scales)
+        intrinsic_mat = self.get_multi_scale_intrinsics(intrinsics,self.num_scales)
+      with tf.compat.v1.name_scope('multi_scale_intrinsics2'):
         intrinsic_mat.set_shape([self.num_scales, 3, 3])
         intrinsic_mat_inv = tf.linalg.inv(intrinsic_mat)
         intrinsic_mat_inv.set_shape([self.num_scales, 3, 3])
