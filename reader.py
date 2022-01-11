@@ -79,7 +79,7 @@ class DataReader(object):
 
       with tf.compat.v1.name_scope('image_augmentation_scale_crop'):
         image_stack, intrinsics = self.augment_images_scale_crop(
-            image_stack, intrinsics, self.img_height, self.img_width)
+        image_stack, intrinsics, self.img_height, self.img_width)
 
       with tf.compat.v1.name_scope('multi_scale_intrinsics'):
         intrinsic_mat = self.get_multi_scale_intrinsics(intrinsics,self.num_scales)
