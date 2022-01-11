@@ -51,6 +51,9 @@ class DataReader(object):
       with tf.compat.v1.name_scope('enqueue_paths'):
         seed = random.randint(0, 2**31 - 1)
         self.file_lists = self.compile_file_list(self.data_dir, 'train')
+        f = open("concat.txt", "w")
+        f.write("enqueue_paths-"+str(file_lists))
+        f.close()
         image_paths_queue = tf.compat.v1.train.string_input_producer(self.file_lists['image_file_list'], seed=seed, shuffle=True)
         #image_paths_queue = tf.data.TextLineDataset(self.file_lists['image_file_list'])
         cam_paths_queue = tf.compat.v1.train.string_input_producer(self.file_lists['cam_file_list'], seed=seed, shuffle=True)
