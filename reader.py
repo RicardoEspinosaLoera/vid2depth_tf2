@@ -47,32 +47,17 @@ class DataReader(object):
 
   def read_data(self):
     """Provides images and camera intrinsics."""
-    f = open("concat.txt", "w")
-    f.write("read_data\n")
-    f.close()
     with tf.compat.v1.name_scope('data_loading'):
       with tf.compat.v1.name_scope('enqueue_paths'):
         seed = random.randint(0, 2**31 - 1)
         self.file_lists = self.compile_file_list(self.data_dir, 'train')
-        f = open("concat.txt", "w")
-        f.write("\nfile_lists\n")
-        f.write(str(len(self.file_lists)))
-        f.close()
         image_paths_queue = tf.compat.v1.train.string_input_producer(self.file_lists['image_file_list'], seed=seed, shuffle=True)
         #image_paths_queue = tf.data.TextLineDataset(self.file_lists['image_file_list'])
         cam_paths_queue = tf.compat.v1.train.string_input_producer(self.file_lists['cam_file_list'], seed=seed, shuffle=True)
         #cam_paths_queue = tf.data.TextLineDataset(self.file_lists['cam_file_list'])
         img_reader = tf.compat.v1.WholeFileReader()
         _, image_contents = img_reader.read(image_paths_queue)
-        f = open("concat.txt", "w")
-        f.write("\nimage_contents\n")
-        f.write(str(image_contents.shape))
-        f.close()
         image_seq = tf.io.decode_jpeg(image_contents)
-        f = open("concat.txt", "w")
-        f.write("\nimage_seq\n")
-        f.write(str(image_seq.shape))
-        f.close()
       with tf.compat.v1.name_scope('load_intrinsics'):
         cam_reader = tf.compat.v1.TextLineReader()
         _, raw_cam_contents = cam_reader.read(cam_paths_queue)
@@ -113,9 +98,6 @@ class DataReader(object):
   def unpack_images(self, image_seq):
     """[h, w * seq_length, 3] -> [h, w, 3 * seq_length]."""
     with tf.compat.v1.name_scope('unpack_images'):
-      f = open("concat.txt", "w")
-      f.write("unpack_images-"+str(image_seq.shape))
-      f.close()
       image_list = [
           image_seq[:, i * self.img_width:(i + 1) * self.img_width, :]
           for i in range(self.seq_length)
