@@ -51,16 +51,14 @@ class DataReader(object):
       with tf.compat.v1.name_scope('enqueue_paths'):
         seed = random.randint(0, 2**31 - 1)
         self.file_lists = self.compile_file_list(self.data_dir, 'train')
-        image_paths_queue = tf.train.string_input_producer(self.file_lists['image_file_list'], seed=seed, shuffle=True)
+        image_paths_queue = tf.compat.v1.train.string_input_producer(self.file_lists['image_file_list'], seed=seed, shuffle=True)
         #image_paths_queue = tf.data.TextLineDataset(self.file_lists['image_file_list'])
         cam_paths_queue = tf.compat.v1.train.string_input_producer(self.file_lists['cam_file_list'], seed=seed, shuffle=True)
         #cam_paths_queue = tf.data.TextLineDataset(self.file_lists['cam_file_list'])
         img_reader = tf.compat.v1.WholeFileReader()
         _, image_contents = img_reader.read(image_paths_queue)
-        image_seq = tf.image.decode_jpeg(image_contents)
-        f = open("concat.txt", "w")
-        f.write(str(image_seq.shape))
-        f.close()
+        image_seq = tf.image.decode_image(image_contents)
+        
       with tf.compat.v1.name_scope('load_intrinsics'):
         cam_reader = tf.compat.v1.TextLineReader()
         _, raw_cam_contents = cam_reader.read(cam_paths_queue)
@@ -96,7 +94,7 @@ class DataReader(object):
                 min_after_dequeue=QUEUE_SIZE))
         logging.info('image_stack: %s', util.info(image_stack))
     
-    return image_stack, intrinsic_mat, intrinsic_mat_inv,image_paths_queue
+    return image_stack, intrinsic_mat, intrinsic_mat_inv,image_seq
 
   def unpack_images(self, image_seq):
     """[h, w * seq_length, 3] -> [h, w, 3 * seq_length]."""
