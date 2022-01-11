@@ -364,7 +364,12 @@ class Model(object):
           image_seq[:, :, i * self.img_width:(i + 1) * self.img_width, :]
           for i in range(self.seq_length)
       ]
-      logging.info('concatenating')
+      f = open("concat.txt", "a")
+      f.write("Begining")
+      for i in image_list:
+        f.write(i)
+      f.write("End")
+      f.close()
       image_stack = tf.concat(image_list, axis=3)
       image_stack.set_shape([
           self.batch_size, self.img_height, self.img_width, self.seq_length * 3
