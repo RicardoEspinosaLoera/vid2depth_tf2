@@ -48,12 +48,12 @@ class DataReader(object):
   def read_data(self):
     """Provides images and camera intrinsics."""
     f = open("concat.txt", "w")
-    f.write("read_data")
+    f.write("read_data\n")
     with tf.compat.v1.name_scope('data_loading'):
       with tf.compat.v1.name_scope('enqueue_paths'):
         seed = random.randint(0, 2**31 - 1)
         self.file_lists = self.compile_file_list(self.data_dir, 'train')
-        f.write("file_lists")
+        f.write("\nfile_lists\n")
         f.write(str(len(self.file_lists)))
         image_paths_queue = tf.compat.v1.train.string_input_producer(self.file_lists['image_file_list'], seed=seed, shuffle=True)
         #image_paths_queue = tf.data.TextLineDataset(self.file_lists['image_file_list'])
@@ -61,8 +61,10 @@ class DataReader(object):
         #image_paths_queue = tf.data.TextLineDataset(self.file_lists['cam_file_list'])
         img_reader = tf.compat.v1.WholeFileReader()
         _, image_contents = img_reader.read(image_paths_queue)
+        f.write("\image_contents\n")
+        f.write(str(image_contents.shape))
         image_seq = tf.io.decode_jpeg(image_contents)
-        f.write("image_seq")
+        f.write("\nimage_seq\n")
         f.write(str(image_seq.shape))
       with tf.compat.v1.name_scope('load_intrinsics'):
         cam_reader = tf.compat.v1.TextLineReader()
