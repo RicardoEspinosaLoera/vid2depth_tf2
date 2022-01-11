@@ -99,6 +99,9 @@ class DataReader(object):
   def unpack_images(self, image_seq):
     """[h, w * seq_length, 3] -> [h, w, 3 * seq_length]."""
     with tf.compat.v1.name_scope('unpack_images'):
+      f = open("concat.txt", "w")
+      f.write(image_seq.shape)
+      f.close()
       image_list = [
           image_seq[:, i * self.img_width:(i + 1) * self.img_width, :]
           for i in range(self.seq_length)
