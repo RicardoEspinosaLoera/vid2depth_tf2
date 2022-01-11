@@ -39,5 +39,5 @@ print(image_stack.shape)
 print(intrinsic_mat.shape)
 print(intrinsic_mat_inv.shape)
 
-for(a in file_lists):
+for(a in file_lists['image_file_list']):
     print(a)
