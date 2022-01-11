@@ -26,7 +26,6 @@ import re
 from absl import logging
 import numpy as np
 import scipy.misc
-import imageio
 import cv2
 
 CITYSCAPES_CROP_BOTTOM = True  # Crop bottom 25% to remove the car hood.
@@ -104,7 +103,7 @@ class Bike(object):
     """Reads the image and crops it according to first letter of frame_id."""
     crop_type = frame_id[0]
     img_file = os.path.join(self.dataset_dir, frame_id[1:])
-    img = imageio.imread(img_file)
+    img = cv2.imread(img_file)
     allowed_height = int(img.shape[1] * self.img_height / self.img_width)
     # Starting height for the middle crop.
     mid_crop_top = int(img.shape[0] / 2 - allowed_height / 2)
