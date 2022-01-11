@@ -212,28 +212,30 @@ class DataReader(object):
 
     with gfile.GFile(os.path.join(data_dir, '%s.txt' % split), 'r') as f:
       frames = f.readlines()
-    subfolders = [x.split(' ')[0] for x in frames]
-    frame_ids = [x.split(' ')[1][:-1] for x in frames]
-    image_file_list = [
-        os.path.join(data_dir, subfolders[i], frame_ids[i] + '.jpg')
-        for i in range(len(frames))
-    ]
-    cam_file_list = [
-        os.path.join(data_dir, subfolders[i], frame_ids[i] + '_cam.txt')
-        for i in range(len(frames))
-    ]    
-    
-    
-    file_lists = {}
-    file_lists['image_file_list'] = image_file_list
-    file_lists['cam_file_list'] = cam_file_list
-    if load_pose:
-      pose_file_list = [
-          os.path.join(data_dir, subfolders[i], frame_ids[i] + '_pose.txt')
+      subfolders = [x.split(' ')[0] for x in frames]
+      frame_ids = [x.split(' ')[1][:-1] for x in frames]
+      image_file_list = [
+          os.path.join(data_dir, subfolders[i], frame_ids[i] + '.jpg')
           for i in range(len(frames))
       ]
-      file_lists['pose_file_list'] = pose_file_list
-    self.steps_per_epoch = len(image_file_list) // self.batch_size
+      cam_file_list = [
+          os.path.join(data_dir, subfolders[i], frame_ids[i] + '_cam.txt')
+          for i in range(len(frames))
+      ]    
+
+      f.write("\image_file_list\n")
+      f.write(str(len(image_file_list)))
+    
+      file_lists = {}
+      file_lists['image_file_list'] = image_file_list
+      file_lists['cam_file_list'] = cam_file_list
+      if load_pose:
+        pose_file_list = [
+            os.path.join(data_dir, subfolders[i], frame_ids[i] + '_pose.txt')
+            for i in range(len(frames))
+        ]
+        file_lists['pose_file_list'] = pose_file_list
+      self.steps_per_epoch = len(image_file_list) // self.batch_size
     return file_lists
 
   @classmethod
