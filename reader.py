@@ -49,24 +49,33 @@ class DataReader(object):
     """Provides images and camera intrinsics."""
     f = open("concat.txt", "w")
     f.write("read_data\n")
+    f.close()
     with tf.compat.v1.name_scope('data_loading'):
       with tf.compat.v1.name_scope('enqueue_paths'):
         seed = random.randint(0, 2**31 - 1)
         self.file_lists = self.compile_file_list(self.data_dir, 'train')
+        f = open("concat.txt", "w")
         f.write("\nfile_lists\n")
         f.write(str(len(self.file_lists)))
+        f.close()
         image_paths_queue = tf.compat.v1.train.string_input_producer(self.file_lists['image_file_list'], seed=seed, shuffle=True)
+        f = open("concat.txt", "w")
         f.write("\image_paths_queue\n")
         f.write(str(image_paths_queue.shape))
+        f.close()
         #image_paths_queue = tf.data.TextLineDataset(self.file_lists['image_file_list'])
         cam_paths_queue = tf.compat.v1.train.string_input_producer(self.file_lists['cam_file_list'], seed=seed, shuffle=True)
         #cam_paths_queue = tf.data.TextLineDataset(self.file_lists['cam_file_list'])
         img_reader = tf.compat.v1.WholeFileReader()
         _, image_contents = img_reader.read(image_paths_queue)
+        f = open("concat.txt", "w")
         f.write("\nimage_contents\n")
+        f.close()
         f.write(str(image_contents.shape))
         image_seq = tf.io.decode_jpeg(image_contents)
+        f = open("concat.txt", "w")
         f.write("\nimage_seq\n")
+        f.close()
         f.write(str(image_seq.shape))
       with tf.compat.v1.name_scope('load_intrinsics'):
         cam_reader = tf.compat.v1.TextLineReader()
@@ -102,7 +111,7 @@ class DataReader(object):
                 capacity=QUEUE_SIZE + QUEUE_BUFFER * self.batch_size,
                 min_after_dequeue=QUEUE_SIZE))
         logging.info('image_stack: %s', util.info(image_stack))
-    f.close()
+    
     return image_stack, intrinsic_mat, intrinsic_mat_inv
 
   def unpack_images(self, image_seq):
@@ -222,9 +231,10 @@ class DataReader(object):
           os.path.join(data_dir, subfolders[i], frame_ids[i] + '_cam.txt')
           for i in range(len(frames))
       ]    
-
+      f = open("concat.txt", "w")
       f.write("\image_file_list\n")
       f.write(str(len(image_file_list)))
+      f.close()
     
       file_lists = {}
       file_lists['image_file_list'] = image_file_list
