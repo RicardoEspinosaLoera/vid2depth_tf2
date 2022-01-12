@@ -56,9 +56,7 @@ for i in range(50):
     plt.imsave("example/image_{}.jpg".format(i), _x)
 fname_data = tf.data.Dataset.list_files('example/*.jpg')\
         .shuffle(buffer_sz).repeat(epochs)
-img_batch = fname_data.map(lambda fname: \
-        tf.image.decode_image(tf.read_file(fname),3))\
-        .batch(batch_sz).make_initializable_iterator()
+img_batch = fname_data.map(lambda fname: tf.image.decode_image(tf.io.read_file(fname),3)).batch(batch_sz).make_initializable_iterator()
 
 with tf.Session() as sess:
     sess.run([img_batch.initializer,
