@@ -69,6 +69,18 @@ def compile_file_list(data_dir, split, load_pose=False):
       steps_per_epoch = len(image_file_list) // batch_size
     return file_lists
 
+def unpack_images(image_seq):
+    """[h, w * seq_length, 3] -> [h, w, 3 * seq_length]."""
+      image_list = [
+          image_seq[:, i * 416:(i + 1) * 416, :]
+          for i in range(3)
+      ]
+      image_stack = tf.concat(image_list, axis=2)
+      image_stack.set_shape(
+          [128, 416, 3 * 3])
+    return image_stack
+
+
 seed = random.randint(0, 2**31 - 1)
 file_lists = compile_file_list("/workspace/vid2depth/vid2depth_tf2/data", 'train')
 image_paths_queue = tf.compat.v1.train.string_input_producer(file_lists['image_file_list'], seed=seed, shuffle=True)
@@ -76,8 +88,13 @@ image_paths_queue = tf.compat.v1.train.string_input_producer(file_lists['image_f
 img_reader = tf.compat.v1.WholeFileReader()
 _, image_contents = img_reader.read(image_paths_queue)
 image_seq = tf.image.decode_image(image_contents)
+image_stack = unpack_images(image_seq)
+
+
+
 print(str(image_contents))
 print(tf.shape(image_seq))
 print("--------------Len------------"+str(len(file_lists['image_file_list'])))
 print(str(file_lists['image_file_list'][0]))
 print("--------------Len------------"+str(len(file_lists['cam_file_list'])))
+print(str(image_stack.shape))
