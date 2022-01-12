@@ -39,6 +39,32 @@ gfile = tf.io.gfile
 
 NUM_SCALES = 4
 
+def compile_file_list(self, data_dir, split, load_pose=False):
+    with gfile.GFile(os.path.join(data_dir, '%s.txt' % split), 'r') as f:
+      frames = f.readlines()
+      subfolders = [x.split(' ')[0] for x in frames]
+      frame_ids = [x.split(' ')[1][:-1] for x in frames]
+      image_file_list = [
+          os.path.join(data_dir, subfolders[i], frame_ids[i] + '.jpg')
+          for i in range(len(frames))
+      ]
+      cam_file_list = [
+          os.path.join(data_dir, subfolders[i], frame_ids[i] + '_cam.txt')
+          for i in range(len(frames))
+      ]    
+      
+      file_lists = {}
+      file_lists['image_file_list'] = image_file_list
+      file_lists['cam_file_list'] = cam_file_list
+      if load_pose:
+        pose_file_list = [
+            os.path.join(data_dir, subfolders[i], frame_ids[i] + '_pose.txt')
+            for i in range(len(frames))
+        ]
+        file_lists['pose_file_list'] = pose_file_list
+      self.steps_per_epoch = len(image_file_list) // self.batch_size
+    return file_lists
+
 seed = random.randint(0, 2**31 - 1)
 file_lists = compile_file_list("/workspace/vid2depth/vid2depth_tf2/data", 'train')
 image_paths_queue = tf.compat.v1.train.string_input_producer(file_lists, seed=seed, shuffle=True)
@@ -83,28 +109,3 @@ with tf.Session() as sess:
     print('Done training -- epoch limit reached')
 """
 
-def compile_file_list(self, data_dir, split, load_pose=False):
-    with gfile.GFile(os.path.join(data_dir, '%s.txt' % split), 'r') as f:
-      frames = f.readlines()
-      subfolders = [x.split(' ')[0] for x in frames]
-      frame_ids = [x.split(' ')[1][:-1] for x in frames]
-      image_file_list = [
-          os.path.join(data_dir, subfolders[i], frame_ids[i] + '.jpg')
-          for i in range(len(frames))
-      ]
-      cam_file_list = [
-          os.path.join(data_dir, subfolders[i], frame_ids[i] + '_cam.txt')
-          for i in range(len(frames))
-      ]    
-      
-      file_lists = {}
-      file_lists['image_file_list'] = image_file_list
-      file_lists['cam_file_list'] = cam_file_list
-      if load_pose:
-        pose_file_list = [
-            os.path.join(data_dir, subfolders[i], frame_ids[i] + '_pose.txt')
-            for i in range(len(frames))
-        ]
-        file_lists['pose_file_list'] = pose_file_list
-      self.steps_per_epoch = len(image_file_list) // self.batch_size
-    return file_lists
