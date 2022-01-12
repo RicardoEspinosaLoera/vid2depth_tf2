@@ -97,8 +97,8 @@ config.gpu_options.allow_growth = True
 
 sv = tf.compat.v1.train.Supervisor(save_summaries_secs=0,saver=None) 
 with sv.managed_session(config=config) as sess:
-    sess.run([tf.global_variables_initializer(),
-        tf.local_variables_initializer()])
+    sess.run([tf.compat.v1.global_variables_initializer(),
+        tf.compat.v1.local_variables_initializer()])
     coord = tf.train.Coordinator()
     threads = tf.train.start_queue_runners(coord=coord)
     for _ in range(epochs):
