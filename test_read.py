@@ -41,6 +41,7 @@ NUM_SCALES = 4
 
 steps_per_epoch = 0
 batch_size = 4
+samples = 0
 
 def compile_file_list(data_dir, split, load_pose=False):
     with gfile.GFile(os.path.join(data_dir, '%s.txt' % split), 'r') as f:
