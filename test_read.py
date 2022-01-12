@@ -72,7 +72,7 @@ def compile_file_list(data_dir, split, load_pose=False):
 seed = random.randint(0, 2**31 - 1)
 file_lists = compile_file_list("/workspace/vid2depth/vid2depth_tf2/data", 'train')
 image_paths_queue = tf.compat.v1.train.string_input_producer(file_lists['image_file_list'], seed=seed, shuffle=True)
-cam_paths_queue = tf.data.TextLineDataset(self.file_lists['cam_file_list'])
+cam_paths_queue = tf.data.TextLineDataset(file_lists['cam_file_list'])
 img_reader = tf.compat.v1.WholeFileReader()
 _, image_contents = img_reader.read(image_paths_queue)
 image_seq = tf.image.decode_image(image_contents)
