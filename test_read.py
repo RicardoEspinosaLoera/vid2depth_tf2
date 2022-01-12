@@ -90,12 +90,5 @@ _, image_contents = img_reader.read(image_paths_queue)
 image_seq = tf.image.decode_image(image_contents)
 image_stack = unpack_images(image_seq)
 
-
-
-print(str(image_contents))
-print(tf.shape(image_seq))
-print("--------------Len------------"+str(len(file_lists['image_file_list'])))
-print(str(file_lists['image_file_list'][0]))
-print("--------------Len------------"+str(len(file_lists['cam_file_list'])))
 print(str(image_stack.shape))
-print(str(image_paths_queue.size()))
+
