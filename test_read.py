@@ -95,6 +95,8 @@ print(str(image_stack.shape))
 config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
 
+epochs = 2
+
 with tf.compat.v1.Session() as sess:
     sess.run([tf.compat.v1.global_variables_initializer(),
         tf.compat.v1.local_variables_initializer()])
