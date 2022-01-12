@@ -99,7 +99,7 @@ with tf.compat.v1.Session() as sess:
     sess.run([tf.compat.v1.global_variables_initializer(),
         tf.compat.v1.local_variables_initializer()])
     coord = tf.train.Coordinator()
-    threads = tf.train.start_queue_runners(coord=coord)
+    threads = tf.compat.v1.train.start_queue_runners(coord=coord)
     for _ in range(epochs):
         try:
             while not coord.should_stop():
