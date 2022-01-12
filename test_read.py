@@ -90,7 +90,8 @@ seed = random.randint(0, 2**31 - 1)
 file_lists = compile_file_list("/workspace/vid2depth/vid2depth_tf2/data", 'train')
 for a in file_lists['image_file_list']:
   img = cv2.imread(a)
-  print(img.shape)
+  if(img.shape != (416,384,3)):
+    print(img.shape)
 """
 image_paths_queue = tf.compat.v1.train.string_input_producer(file_lists['image_file_list'], seed=seed, shuffle=True)
 #cam_paths_queue = tf.data.TextLineDataset(file_lists['cam_file_list'])
