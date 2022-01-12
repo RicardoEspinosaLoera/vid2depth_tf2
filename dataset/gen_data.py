@@ -154,7 +154,7 @@ def _gen_example(i, all_examples):
   if not example:
     return
   image_seq_stack = _stack_image_seq(example['image_seq'])
-  print(image_seq_stack.shape)
+  print("image_seq_stack"+str(image_seq_stack.shape))
   example.pop('image_seq', None)  # Free up memory.
   intrinsics = example['intrinsics']
   fx = intrinsics[0, 0]
@@ -166,7 +166,7 @@ def _gen_example(i, all_examples):
     gfile.makedirs(save_dir)
   img_filepath = os.path.join(save_dir, '%s.jpg' % example['file_name'])
   #scipy.misc.imsave(img_filepath, image_seq_stack.astype(np.uint8))
-  print(image_seq_stack.astype(np.uint8).shape)
+  #print(image_seq_stack.astype(np.uint8).shape)
   cv2.imwrite(img_filepath, image_seq_stack.astype(np.uint8))
   cam_filepath = os.path.join(save_dir, '%s_cam.txt' % example['file_name'])
   example['cam'] = '%f,0.,%f,0.,%f,%f,0.,0.,1.' % (fx, cx, fy, cy)
