@@ -104,6 +104,7 @@ with tf.compat.v1.Session() as sess:
     for _ in range(epochs):
         try:
             while not coord.should_stop():
+                print(str(len(image_stack)))
                 sess.run(image_stack)
                 samples += batch_size
                 print(samples, "samples have been seen")
