@@ -95,6 +95,7 @@ print(str(image_stack.shape))
 config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
 
+sv = tf.compat.v1.train.Supervisor(save_summaries_secs=0,saver=None) 
 with sv.managed_session(config=config) as sess:
     sess.run([tf.global_variables_initializer(),
         tf.local_variables_initializer()])
