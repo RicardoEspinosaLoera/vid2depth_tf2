@@ -154,6 +154,7 @@ def _gen_example(i, all_examples):
   if not example:
     return
   image_seq_stack = _stack_image_seq(example['image_seq'])
+  print(image_seq_stack.shape)
   example.pop('image_seq', None)  # Free up memory.
   intrinsics = example['intrinsics']
   fx = intrinsics[0, 0]
