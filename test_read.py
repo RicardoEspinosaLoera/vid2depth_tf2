@@ -87,13 +87,13 @@ image_paths_queue = tf.compat.v1.train.string_input_producer(file_lists['image_f
 img_reader = tf.compat.v1.WholeFileReader()
 _, image_contents = img_reader.read(image_paths_queue)
 image_seq = tf.image.decode_image(image_contents)
-print("\nImage List "+str(image_seq.shape))
-image_stack = unpack_images(image_seq)
+#print("\nimage_seq "+str(image_seq.shape))
+#image_stack = unpack_images(image_seq)
 
 config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
 
-epochs = 2
+epochs = 3
 
 with tf.compat.v1.Session() as sess:
     sess.run([tf.compat.v1.global_variables_initializer(),
@@ -103,7 +103,7 @@ with tf.compat.v1.Session() as sess:
     for _ in range(epochs):
         try:
             while not coord.should_stop():
-                sess.run(image_stack)
+                sess.run(image_seq)
                 samples += batch_sz
                 print(samples, "samples have been seen")
         except tf.errors.OutOfRangeError:
