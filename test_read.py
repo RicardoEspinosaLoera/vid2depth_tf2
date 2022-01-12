@@ -94,6 +94,7 @@ for a in file_lists['image_file_list']:
         img[:, i * 416:(i + 1) * 416, :]
         for i in range(3)
   ]
+  print(img.shape)
   print("unpack_images "+str(image_list[0].shape))
   print("unpack_images "+str(image_list[1].shape))
   print("unpack_images "+str(image_list[2].shape))
