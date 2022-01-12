@@ -75,7 +75,7 @@ def unpack_images(image_seq):
     """[h, w * seq_length, 3] -> [h, w, 3 * seq_length]."""
     print("unpack_images "+str(image_seq.shape))
     image_list = [
-        image_seq[:, i * 416:(i + 1) * 416, :]
+        image_seq[:, i * 128:(i + 1) * 128, :]
         for i in range(3)
     ]
     print("unpack_images "+str(image_list[0].shape))
