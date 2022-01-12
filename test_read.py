@@ -32,6 +32,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import shutil
+import random
 
 tf.compat.v1.disable_eager_execution()
 gfile = tf.io.gfile
