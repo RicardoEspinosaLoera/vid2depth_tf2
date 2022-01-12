@@ -92,3 +92,22 @@ image_stack = unpack_images(image_seq)
 
 print(str(image_stack.shape))
 
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.allow_growth = True
+
+with sv.managed_session(config=config) as sess:
+    sess.run([tf.global_variables_initializer(),
+        tf.local_variables_initializer()])
+    coord = tf.train.Coordinator()
+    threads = tf.train.start_queue_runners(coord=coord)
+    for _ in range(epochs):
+        try:
+            while not coord.should_stop():
+                sess.run(image_stack)
+                samples += 4
+                print(samples, "samples have been seen")
+        except tf.errors.OutOfRangeError:
+            print('Done training -- epoch limit reached')
+        finally:
+            coord.request_stop()
+    coord.join(threads)
