@@ -89,6 +89,7 @@ def unpack_images(image_seq):
 seed = random.randint(0, 2**31 - 1)
 file_lists = compile_file_list("/workspace/vid2depth/vid2depth_tf2/data", 'train')
 for a in file_lists:
+  print(a)
   img = cv2.imread(a)
   print(img.shape)
 """
