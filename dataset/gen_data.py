@@ -153,6 +153,7 @@ def _gen_example(i, all_examples):
   example = dataloader.get_example_with_index(i)
   if not example:
     return
+  print("example"+str(example.shape))
   image_seq_stack = _stack_image_seq(example['image_seq'])
   print("image_seq_stack"+str(image_seq_stack.shape))
   example.pop('image_seq', None)  # Free up memory.
