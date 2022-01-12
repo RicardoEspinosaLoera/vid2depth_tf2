@@ -39,6 +39,10 @@ gfile = tf.io.gfile
 
 NUM_SCALES = 4
 
+
+steps_per_epoch = 0
+batch_size = 4
+
 def compile_file_list(data_dir, split, load_pose=False):
     with gfile.GFile(os.path.join(data_dir, '%s.txt' % split), 'r') as f:
       frames = f.readlines()
@@ -62,13 +66,13 @@ def compile_file_list(data_dir, split, load_pose=False):
             for i in range(len(frames))
         ]
         file_lists['pose_file_list'] = pose_file_list
-      self.steps_per_epoch = len(image_file_list) // self.batch_size
+      steps_per_epoch = len(image_file_list) // batch_size
     return file_lists
 
 seed = random.randint(0, 2**31 - 1)
 file_lists = compile_file_list("/workspace/vid2depth/vid2depth_tf2/data", 'train')
 image_paths_queue = tf.compat.v1.train.string_input_producer(file_lists, seed=seed, shuffle=True)
-cam_paths_queue = tf.compat.v1.train.string_input_producer(self.file_lists['cam_file_list'], seed=seed, shuffle=True)
+cam_paths_queue = tf.compat.v1.train.string_input_producer(file_lists['cam_file_list'], seed=seed, shuffle=True)
 #cam_paths_queue = tf.data.TextLineDataset(self.file_lists['cam_file_list'])
 img_reader = tf.compat.v1.WholeFileReader()
 _, image_contents = img_reader.read(image_paths_queue)
