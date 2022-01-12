@@ -76,7 +76,9 @@ def unpack_images(image_seq):
         image_seq[:, i * 416:(i + 1) * 416, :]
         for i in range(3)
     ]
-    print("unpack_images "+str(len(image_list)))
+    print("unpack_images "+str(len(image_list[0])))
+    print("unpack_images "+str(len(image_list[1])))
+    print("unpack_images "+str(len(image_list[2])))
     image_stack = tf.concat(image_list, axis=2)
     image_stack.set_shape(
         [128, 416, 3 * 3])
