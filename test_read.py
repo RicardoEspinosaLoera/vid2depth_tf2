@@ -95,8 +95,7 @@ print(str(image_stack.shape))
 config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
 
-sv = tf.compat.v1.train.Supervisor(save_summaries_secs=0,saver=None) 
-with sv.managed_session(config=config) as sess:
+with tf.Session() as sess:
     sess.run([tf.compat.v1.global_variables_initializer(),
         tf.compat.v1.local_variables_initializer()])
     coord = tf.train.Coordinator()
@@ -104,8 +103,8 @@ with sv.managed_session(config=config) as sess:
     for _ in range(epochs):
         try:
             while not coord.should_stop():
-                sess.run(image_stack)
-                samples += 4
+                sess.run(img_batch)
+                samples += batch_sz
                 print(samples, "samples have been seen")
         except tf.errors.OutOfRangeError:
             print('Done training -- epoch limit reached')
