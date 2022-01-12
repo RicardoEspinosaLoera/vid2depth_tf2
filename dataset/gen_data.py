@@ -188,6 +188,7 @@ def _stack_image_seq(seq):
       res = im
     else:
       res = np.hstack((res, im))
+  print("IM"+str(im.shape))
   print(res.shape)
   return res
 
