@@ -106,6 +106,7 @@ with tf.compat.v1.Session() as sess:
             while not coord.should_stop():
                 print(str(image_stack.shape))
                 sess.run(image_stack)
+                print(str(image_stack.shape))
                 samples += batch_size
                 print(samples, "samples have been seen")
         except tf.errors.OutOfRangeError:
