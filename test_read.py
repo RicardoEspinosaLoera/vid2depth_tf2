@@ -78,22 +78,7 @@ img_reader = tf.compat.v1.WholeFileReader()
 _, image_contents = img_reader.read(image_paths_queue)
 image_seq = tf.image.decode_image(image_contents)
 
-with tf.Session() as sess:
-    sess.run([tf.global_variables_initializer(),
-        tf.local_variables_initializer()])
-    coord = tf.train.Coordinator()
-    threads = tf.train.start_queue_runners(coord=coord)
-    for _ in range(epochs):
-        try:
-            while not coord.should_stop():
-                sess.run(image_seq)
-                samples += batch_sz;
-                print(samples, "samples have been seen")
-        except tf.errors.OutOfRangeError:
-            print('Done training -- epoch limit reached')
-        finally:
-            coord.request_stop();
-    coord.join(threads)
+
 """
 reader = reader.DataReader("/workspace/vid2depth/vid2depth_tf2/data", 4,128, 416, 3, NUM_SCALES)
 image_stack, intrinsic_mat, intrinsic_mat_inv,image_contents = reader.read_data()
