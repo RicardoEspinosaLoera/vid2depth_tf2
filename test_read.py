@@ -77,7 +77,7 @@ image_paths_queue = tf.compat.v1.train.string_input_producer(file_lists['image_f
 img_reader = tf.compat.v1.WholeFileReader()
 _, image_contents = img_reader.read(image_paths_queue)
 image_seq = tf.image.decode_image(image_contents)
-
+print(str(image_seq)
 
 """
 reader = reader.DataReader("/workspace/vid2depth/vid2depth_tf2/data", 4,128, 416, 3, NUM_SCALES)
