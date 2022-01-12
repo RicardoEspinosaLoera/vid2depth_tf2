@@ -78,38 +78,3 @@ img_reader = tf.compat.v1.WholeFileReader()
 _, image_contents = img_reader.read(image_paths_queue)
 image_seq = tf.image.decode_image(image_contents)
 print(str(image_seq)
-
-"""
-reader = reader.DataReader("/workspace/vid2depth/vid2depth_tf2/data", 4,128, 416, 3, NUM_SCALES)
-image_stack, intrinsic_mat, intrinsic_mat_inv,image_contents = reader.read_data()
-print(image_stack.shape)
-print(intrinsic_mat.shape)
-print(str(image_contents))
-
-if not os.path.exists('example'):
-    shutil.rmTree('example')
-    os.mkdir('example')
-
-batch_sz = 10; epochs = 2; buffer_sz = 30; samples = 0
-for i in range(50):
-    _x = np.random.randint(0, 256, (10, 10, 3), np.uint8)
-    plt.imsave("example/image_{}.jpg".format(i), _x)
-fname_data = tf.data.Dataset.list_files('example/*.jpg')\
-        .shuffle(buffer_sz).repeat(epochs)
-img_batch = fname_data.map(lambda fname: tf.image.decode_image(tf.io.read_file(fname),3)).batch(batch_sz).make_initializable_iterator()
-
-with tf.Session() as sess:
-    sess.run([img_batch.initializer,
-        tf.global_variables_initializer(),
-        tf.local_variables_initializer()])
-    next_element = img_batch.get_next()
-    try:
-        while True:
-            sess.run(next_element)
-            samples += batch_sz
-            print(samples, "samples have been seen")
-    except tf.errors.OutOfRangeError:
-        pass
-    print('Done training -- epoch limit reached')
-"""
-
