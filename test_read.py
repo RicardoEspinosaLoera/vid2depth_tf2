@@ -72,12 +72,11 @@ def compile_file_list(data_dir, split, load_pose=False):
 def unpack_images(image_seq):
     """[h, w * seq_length, 3] -> [h, w, 3 * seq_length]."""
     print("unpack_images "+str(image_seq.shape))
-    print(image_seq[:, :, :])
-
     image_list = [
         image_seq[:, i * 416:(i + 1) * 416, :]
         for i in range(3)
     ]
+    print("unpack_images "+len(image_list))
     image_stack = tf.concat(image_list, axis=2)
     image_stack.set_shape(
         [128, 416, 3 * 3])
