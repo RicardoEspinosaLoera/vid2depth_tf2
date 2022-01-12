@@ -74,7 +74,7 @@ def unpack_images(image_seq):
         image_seq[:, i * 416:(i + 1) * 416, :]
         for i in range(3)
     ]
-    print("Image List"+str(len(image_list)))
+    print("\nImage List "+str(len(image_list)))
     image_stack = tf.concat(image_list, axis=2)
     image_stack.set_shape(
         [128, 416, 3 * 3])
@@ -87,6 +87,7 @@ image_paths_queue = tf.compat.v1.train.string_input_producer(file_lists['image_f
 img_reader = tf.compat.v1.WholeFileReader()
 _, image_contents = img_reader.read(image_paths_queue)
 image_seq = tf.image.decode_image(image_contents)
+print("\nImage List "+str(image_seq.shape))
 image_stack = unpack_images(image_seq)
 
 config = tf.compat.v1.ConfigProto()
