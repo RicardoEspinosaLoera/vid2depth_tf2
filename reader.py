@@ -26,7 +26,6 @@ import tensorflow as tf
 import util
 import glob
 
-#gfile = tf.compat.v1.gfile
 gfile = tf.io.gfile
 
 QUEUE_SIZE = 2000
@@ -51,14 +50,14 @@ class DataReader(object):
       with tf.compat.v1.name_scope('enqueue_paths'):
         seed = random.randint(0, 2**31 - 1)
         self.file_lists = self.compile_file_list(self.data_dir, 'train')
-        image_paths_queue = tf.compat.v1.train.string_input_producer(self.file_lists['image_file_list'], seed=seed, shuffle=True)
-        #image_paths_queue = tf.data.TextLineDataset(self.file_lists['image_file_list'])
-        cam_paths_queue = tf.compat.v1.train.string_input_producer(self.file_lists['cam_file_list'], seed=seed, shuffle=True)
-        #cam_paths_queue = tf.data.TextLineDataset(self.file_lists['cam_file_list'])
+        image_paths_queue = tf.compat.v1.train.string_input_producer(
+            self.file_lists['image_file_list'], seed=seed, shuffle=True)
+        cam_paths_queue = tf.compat.v1.train.string_input_producer(
+            self.file_lists['cam_file_list'], seed=seed, shuffle=True)
         img_reader = tf.compat.v1.WholeFileReader()
         _, image_contents = img_reader.read(image_paths_queue)
-        image_seq = tf.image.decode_image(image_contents)
-        
+        image_seq = tf.image.decode_jpeg(image_contents)
+
       with tf.compat.v1.name_scope('load_intrinsics'):
         cam_reader = tf.compat.v1.TextLineReader()
         _, raw_cam_contents = cam_reader.read(cam_paths_queue)
@@ -74,13 +73,16 @@ class DataReader(object):
 
       with tf.compat.v1.name_scope('image_augmentation'):
         image_seq = self.augment_image_colorspace(image_seq)
-        image_stack = self.unpack_images(image_seq)
+
+      image_stack = self.unpack_images(image_seq)
 
       with tf.compat.v1.name_scope('image_augmentation_scale_crop'):
-        image_stack, intrinsics = self.augment_images_scale_crop(image_stack, intrinsics, self.img_height, self.img_width)
+        image_stack, intrinsics = self.augment_images_scale_crop(
+            image_stack, intrinsics, self.img_height, self.img_width)
 
       with tf.compat.v1.name_scope('multi_scale_intrinsics'):
-        intrinsic_mat = self.get_multi_scale_intrinsics(intrinsics,self.num_scales)
+        intrinsic_mat = self.get_multi_scale_intrinsics(intrinsics,
+                                                        self.num_scales)
         intrinsic_mat.set_shape([self.num_scales, 3, 3])
         intrinsic_mat_inv = tf.linalg.inv(intrinsic_mat)
         intrinsic_mat_inv.set_shape([self.num_scales, 3, 3])
@@ -93,7 +95,6 @@ class DataReader(object):
                 capacity=QUEUE_SIZE + QUEUE_BUFFER * self.batch_size,
                 min_after_dequeue=QUEUE_SIZE))
         logging.info('image_stack: %s', util.info(image_stack))
-    
     return image_stack, intrinsic_mat, intrinsic_mat_inv
 
   def unpack_images(self, image_seq):
@@ -200,27 +201,28 @@ class DataReader(object):
 
     with gfile.GFile(os.path.join(data_dir, '%s.txt' % split), 'r') as f:
       frames = f.readlines()
-      subfolders = [x.split(' ')[0] for x in frames]
-      frame_ids = [x.split(' ')[1][:-1] for x in frames]
-      image_file_list = [
-          os.path.join(data_dir, subfolders[i], frame_ids[i] + '.jpg')
+    subfolders = [x.split(' ')[0] for x in frames]
+    frame_ids = [x.split(' ')[1][:-1] for x in frames]
+    image_file_list = [
+        os.path.join(data_dir, subfolders[i], frame_ids[i] + '.jpg')
+        for i in range(len(frames))
+    ]
+    cam_file_list = [
+        os.path.join(data_dir, subfolders[i], frame_ids[i] + '_cam.txt')
+        for i in range(len(frames))
+    ]    
+    
+    
+    file_lists = {}
+    file_lists['image_file_list'] = image_file_list
+    file_lists['cam_file_list'] = cam_file_list
+    if load_pose:
+      pose_file_list = [
+          os.path.join(data_dir, subfolders[i], frame_ids[i] + '_pose.txt')
           for i in range(len(frames))
       ]
-      cam_file_list = [
-          os.path.join(data_dir, subfolders[i], frame_ids[i] + '_cam.txt')
-          for i in range(len(frames))
-      ]    
-      
-      file_lists = {}
-      file_lists['image_file_list'] = image_file_list
-      file_lists['cam_file_list'] = cam_file_list
-      if load_pose:
-        pose_file_list = [
-            os.path.join(data_dir, subfolders[i], frame_ids[i] + '_pose.txt')
-            for i in range(len(frames))
-        ]
-        file_lists['pose_file_list'] = pose_file_list
-      self.steps_per_epoch = len(image_file_list) // self.batch_size
+      file_lists['pose_file_list'] = pose_file_list
+    self.steps_per_epoch = len(image_file_list) // self.batch_size
     return file_lists
 
   @classmethod
@@ -233,15 +235,14 @@ class DataReader(object):
 
   @classmethod
   def get_multi_scale_intrinsics(cls, intrinsics, num_scales):
-    with tf.compat.v1.name_scope('get_multi_scale_intrinsics'):
-      """Returns multiple intrinsic matrices for different scales."""
-      intrinsics_multi_scale = []
-      # Scale the intrinsics accordingly for each scale
-      for s in range(num_scales):
-        fx = intrinsics[0, 0] / (2**s)
-        fy = intrinsics[1, 1] / (2**s)
-        cx = intrinsics[0, 2] / (2**s)
-        cy = intrinsics[1, 2] / (2**s)
-        intrinsics_multi_scale.append(cls.make_intrinsics_matrix(fx, fy, cx, cy))
-      intrinsics_multi_scale = tf.stack(intrinsics_multi_scale)
-      return intrinsics_multi_scale
+    """Returns multiple intrinsic matrices for different scales."""
+    intrinsics_multi_scale = []
+    # Scale the intrinsics accordingly for each scale
+    for s in range(num_scales):
+      fx = intrinsics[0, 0] / (2**s)
+      fy = intrinsics[1, 1] / (2**s)
+      cx = intrinsics[0, 2] / (2**s)
+      cy = intrinsics[1, 2] / (2**s)
+      intrinsics_multi_scale.append(cls.make_intrinsics_matrix(fx, fy, cx, cy))
+    intrinsics_multi_scale = tf.stack(intrinsics_multi_scale)
+    return intrinsics_multi_scale
