@@ -38,8 +38,5 @@ reader = reader.DataReader("/workspace/vid2depth/vid2depth_tf2/data", 4,128, 416
 image_stack, intrinsic_mat, intrinsic_mat_inv,file_lists = reader.read_data()
 print(image_stack.shape)
 print(intrinsic_mat.shape)
-print(intrinsic_mat_inv.shape)
+print(str(image_contents))
 
-for a in file_lists['image_file_list']:
-    if not gfile.exists(a):
-        print(a)
