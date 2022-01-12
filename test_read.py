@@ -30,7 +30,6 @@ import util
 import tf_slim as slim
 import numpy as np
 import matplotlib.pyplot as plt
-import shutil
 import os
 
 tf.compat.v1.disable_eager_execution()
@@ -47,7 +46,6 @@ print(str(image_contents))
 """
 
 if not os.path.exists('example'):
-    shutil.rmTree('example')
     os.mkdir('example')
 
 batch_sz = 10; epochs = 2; buffer_size = 30; samples = 0
