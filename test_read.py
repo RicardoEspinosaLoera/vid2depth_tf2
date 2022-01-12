@@ -33,6 +33,7 @@ import matplotlib.pyplot as plt
 import os
 import shutil
 import random
+import cv2
 
 tf.compat.v1.disable_eager_execution()
 gfile = tf.io.gfile
@@ -86,6 +87,10 @@ def unpack_images(image_seq):
 
 seed = random.randint(0, 2**31 - 1)
 file_lists = compile_file_list("/workspace/vid2depth/vid2depth_tf2/data", 'train')
+for a in file_lists:
+  img = cv2.imread(a)
+  print(img.shape)
+"""
 image_paths_queue = tf.compat.v1.train.string_input_producer(file_lists['image_file_list'], seed=seed, shuffle=True)
 #cam_paths_queue = tf.data.TextLineDataset(file_lists['cam_file_list'])
 img_reader = tf.compat.v1.WholeFileReader()
@@ -117,3 +122,4 @@ with tf.compat.v1.Session() as sess:
         finally:
             coord.request_stop()
     coord.join(threads)
+    """
