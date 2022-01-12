@@ -88,16 +88,13 @@ def unpack_images(image_seq):
 
 seed = random.randint(0, 2**31 - 1)
 file_lists = compile_file_list("/workspace/vid2depth/vid2depth_tf2/data", 'train')
-for a in file_lists['image_file_list']:
-  img = cv2.imread(a)
-  if(img.shape != (416,384,3)):
-    print(img.shape)
-"""
+
 image_paths_queue = tf.compat.v1.train.string_input_producer(file_lists['image_file_list'], seed=seed, shuffle=True)
 #cam_paths_queue = tf.data.TextLineDataset(file_lists['cam_file_list'])
 img_reader = tf.compat.v1.WholeFileReader()
 _, image_contents = img_reader.read(image_paths_queue)
-image_seq = tf.image.decode_image(image_contents)
+#image_seq = tf.image.decode_image(image_contents)
+image_seq = tf.image.decode_jpeg(image_contents)
 #print("\nimage_seq "+str(image_seq.shape))
 image_stack = unpack_images(image_seq)
 
@@ -124,4 +121,3 @@ with tf.compat.v1.Session() as sess:
         finally:
             coord.request_stop()
     coord.join(threads)
-    """
