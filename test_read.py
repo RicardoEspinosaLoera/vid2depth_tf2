@@ -52,7 +52,8 @@ for i in range(50):
     _x = np.random.randint(0, 256, (10, 10, 3), np.uint8)
     plt.imsave("example/image_{}.jpg".format(i), _x)
 images = tf.io.match_filenames_once('example/*.jpg')
-fname_q = tf.compat.v1.train(images,epochs, True)
+fname_q = tf.compat.v1.train.string_input_producer(images,epochs, True)
+#fname_q = tf.train.string_input_producer(images,epochs, True);
 reader = tf.compat.v1.WholeFileReader()
 _, value = reader.read(fname_q)
 img = tf.image.decode_image(value)
