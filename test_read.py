@@ -105,7 +105,7 @@ with tf.compat.v1.Session() as sess:
         try:
             while not coord.should_stop():
                 sess.run(image_seq)
-                samples += batch_sz
+                samples += batch_size
                 print(samples, "samples have been seen")
         except tf.errors.OutOfRangeError:
             print('Done training -- epoch limit reached')
