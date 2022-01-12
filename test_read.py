@@ -89,7 +89,7 @@ img_reader = tf.compat.v1.WholeFileReader()
 _, image_contents = img_reader.read(image_paths_queue)
 image_seq = tf.image.decode_image(image_contents)
 #print("\nimage_seq "+str(image_seq.shape))
-#image_stack = unpack_images(image_seq)
+image_stack = unpack_images(image_seq)
 
 config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
@@ -104,7 +104,7 @@ with tf.compat.v1.Session() as sess:
     for _ in range(epochs):
         try:
             while not coord.should_stop():
-                sess.run(image_seq)
+                sess.run(image_stack)
                 samples += batch_size
                 print(samples, "samples have been seen")
         except tf.errors.OutOfRangeError:
