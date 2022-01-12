@@ -77,4 +77,4 @@ image_paths_queue = tf.compat.v1.train.string_input_producer(file_lists['image_f
 img_reader = tf.compat.v1.WholeFileReader()
 _, image_contents = img_reader.read(image_paths_queue)
 image_seq = tf.image.decode_image(image_contents)
-print(str(image_seq)
+print(str(image_seq))
