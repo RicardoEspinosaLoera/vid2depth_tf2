@@ -39,7 +39,7 @@ gfile = tf.io.gfile
 
 NUM_SCALES = 4
 
-def compile_file_list(self, data_dir, split, load_pose=False):
+def compile_file_list(data_dir, split, load_pose=False):
     with gfile.GFile(os.path.join(data_dir, '%s.txt' % split), 'r') as f:
       frames = f.readlines()
       subfolders = [x.split(' ')[0] for x in frames]
