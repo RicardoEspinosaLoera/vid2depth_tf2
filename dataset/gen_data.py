@@ -184,11 +184,11 @@ def _gen_example_star(params):
 
 def _stack_image_seq(seq):
   for i, im in enumerate(seq):
-    print("i "+str(i))
     if i == 0:
       res = im
     else:
       res = np.hstack((res, im))
+  print(res.shape)
   return res
 
 
