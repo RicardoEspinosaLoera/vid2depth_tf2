@@ -136,7 +136,7 @@ class Bike(object):
         zoom_y = self.img_height / img.shape[0]
         zoom_x = self.img_width / img.shape[1]
       #img = scipy.misc.imresize(img, (self.img_height, self.img_width))
-      img = cv2.resize(img, (self.img_height, self.img_width))
+      img = cv2.resize(img, (self.img_width,self.img_height))
       image_seq.append(img)
     return image_seq, zoom_x, zoom_y, cy
 
