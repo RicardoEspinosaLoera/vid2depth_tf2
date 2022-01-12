@@ -34,6 +34,7 @@ import os
 import shutil
 import random
 import cv2
+import numpy as np
 
 tf.compat.v1.disable_eager_execution()
 gfile = tf.io.gfile
