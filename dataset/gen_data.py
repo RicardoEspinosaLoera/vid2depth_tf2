@@ -153,9 +153,9 @@ def _gen_example(i, all_examples):
   example = dataloader.get_example_with_index(i)
   if not example:
     return
-  print("example"+str(len(example)))
+  #print("example"+str(len(example)))
   image_seq_stack = _stack_image_seq(example['image_seq'])
-  print("image_seq_stack"+str(image_seq_stack.shape))
+  #print("image_seq_stack"+str(image_seq_stack.shape))
   example.pop('image_seq', None)  # Free up memory.
   intrinsics = example['intrinsics']
   fx = intrinsics[0, 0]
@@ -184,6 +184,7 @@ def _gen_example_star(params):
 
 def _stack_image_seq(seq):
   for i, im in enumerate(seq):
+    print("i "+str(i))
     if i == 0:
       res = im
     else:
