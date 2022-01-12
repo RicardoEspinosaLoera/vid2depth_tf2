@@ -85,9 +85,7 @@ image_stack, intrinsic_mat, intrinsic_mat_inv,image_contents = reader.read_data(
 print(image_stack.shape)
 print(intrinsic_mat.shape)
 print(str(image_contents))
-"""
 
-"""
 if not os.path.exists('example'):
     shutil.rmTree('example')
     os.mkdir('example')
