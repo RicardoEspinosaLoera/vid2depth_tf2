@@ -39,7 +39,6 @@ gfile = tf.io.gfile
 
 NUM_SCALES = 4
 
-
 steps_per_epoch = 0
 batch_size = 4
 
@@ -80,7 +79,6 @@ def unpack_images(image_seq):
         [128, 416, 3 * 3])
     return image_stack
 
-
 seed = random.randint(0, 2**31 - 1)
 file_lists = compile_file_list("/workspace/vid2depth/vid2depth_tf2/data", 'train')
 image_paths_queue = tf.compat.v1.train.string_input_producer(file_lists['image_file_list'], seed=seed, shuffle=True)
@@ -105,7 +103,7 @@ with tf.compat.v1.Session() as sess:
     for _ in range(epochs):
         try:
             while not coord.should_stop():
-                sess.run(img_batch)
+                sess.run(image_stack)
                 samples += batch_sz
                 print(samples, "samples have been seen")
         except tf.errors.OutOfRangeError:
