@@ -52,10 +52,12 @@ for i in range(50):
     _x = np.random.randint(0, 256, (10, 10, 3), np.uint8)
     plt.imsave("example/image_{}.jpg".format(i), _x)
 images = tf.io.match_filenames_once('example/*.jpg')
-fname_q = tf.compat.v1.train.string_input_producer(images,epochs, True)
+seed = random.randint(0, 2**31 - 1)
+self.file_lists = self.compile_file_list(self.data_dir, 'train')
+image_paths_queue = tf.compat.v1.train.string_input_producer(images, seed=seed, shuffle=True)
 #fname_q = tf.train.string_input_producer(images,epochs, True);
 reader = tf.compat.v1.WholeFileReader()
-_, value = reader.read(fname_q)
+_, value = reader.read(image_paths_queue)
 img = tf.image.decode_image(value)
 img_batch = tf.train.batch([img], batch_sz, shapes=([10, 10, 3]))
 with tf.Session() as sess:
