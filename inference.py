@@ -93,7 +93,7 @@ def _run_inference():
     saver.restore(sess, FLAGS.model_ckpt)
     if FLAGS.kitti_video == 'test_files_eigen':
       im_files = util.read_text_lines(
-          util.get_resource_path('dataset/kitti/test_files_eigen.txt'))
+          util.get_resource_path('data/vat.txt'))
       im_files = [os.path.join(FLAGS.kitti_dir, f) for f in im_files]
     else:
       video_path = os.path.join(FLAGS.kitti_dir, FLAGS.kitti_video)
