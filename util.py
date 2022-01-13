@@ -119,3 +119,16 @@ def read_text_lines(filepath):
     lines = f.readlines()
   lines = [l.rstrip() for l in lines]
   return lines
+
+def get_resource_path(data_dir, name):
+    
+    with gfile.GFile(os.path.join(data_dir, '%s.txt' % name), 'r') as f:
+      frames = f.readlines()
+    subfolders = [x.split(' ')[0] for x in frames]
+    frame_ids = [x.split(' ')[1][:-1] for x in frames]
+    image_file_list = [
+        os.path.join(data_dir, subfolders[i], frame_ids[i] + '.jpg')
+        for i in range(len(frames))
+    ]
+    
+    return image_file_list

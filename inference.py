@@ -92,8 +92,7 @@ def _run_inference():
   with sv.managed_session() as sess:
     saver.restore(sess, FLAGS.model_ckpt)
     if FLAGS.kitti_video == 'test_files_eigen':
-      im_files = util.read_text_lines(
-          util.get_resource_path('data/vat.txt'))
+      im_files = util.get_resource_path('data/','val')
       im_files = [os.path.join(FLAGS.kitti_dir, f) for f in im_files]
     else:
       video_path = os.path.join(FLAGS.kitti_dir, FLAGS.kitti_video)
