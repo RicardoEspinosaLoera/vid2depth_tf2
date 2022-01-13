@@ -25,6 +25,8 @@ from absl import logging
 import numpy as np
 import tensorflow as tf
 
+gfile = tf.io.gfile
+
 
 def get_seq_middle(seq_length):
   """Returns relative index for the middle frame in sequence."""
